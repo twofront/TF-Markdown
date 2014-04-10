@@ -1,3 +1,5 @@
+#! /usr/bin/env node
+
 /*	Used to run TF Markdown at the command line. If including in your
 	software use tfmarkdown.js in the root folder.
 */
