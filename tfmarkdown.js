@@ -2,46 +2,50 @@
 var tfmarkdown = {
 	parse: function(md) {
 
-		md = md.replace(/(^)\n{0,1}(#+)(.*)\n{0,1}/gm, function(all, newline, hashcount, title){
+		// Titles
+		md = md.replace(/^(#+)\s(.*)/gm, function(all, hashcount, title){
 			var hc = hashcount.length;
-			return newline+'<h'+hc+'>'+title+'</h'+hc+'>';
+			return '<h'+hc+'>'+title+'</h'+hc+'>';
 		});
-
-		md = md.replace(/\n{0,1}(.*)\n([=-]{2,})\n{0,1}/g, function(all, title, ttype){
+		md = md.replace(/^(.*)\n([=-]{2,})/gm, function(all, title, ttype){
 			var hc = ttype[0] === '=' ? '1' : '2';
 			return '<h'+hc+'>'+title+'</h'+hc+'>';
 		});
 
-		md = md.replace(/(?:\*\*|__)(.*)(?:\*\*|__)/g, function(all, bold){
-			return '<b>'+bold+'</b>';
-		});
-
-		md = md.replace(/[\*_](.*)[\*_]/g, function(all, italics){
-			return '<i>'+italics+'</i>';
-		});
-
-		md = md.replace(/\[(.*)\]\((.*)\)/g, function(all, text, url){
-			return '<a href="'+url+'">'+text+'</a>';
-		});
-
+		// Blockquotes and code blocks
 		md = md.replace(/^>\s((.+\n{0,1})+)/gm, function(all, text){
 			text = text.replace(/(\n>\s|\n)/g, '<br />\n');
 			return '<blockquote>'+text+'</blockquote>';
 		});
-
-		md = md.replace(/^(\*\s.+\n{0,1})+/gm, function(all){
-			all = all.replace(/^\*\s/gm, '<li>');
-			return '<ul>'+all+'</ul>';
+		md = md.replace(/^(((\t+|\s{2,}).*\n)+)/gm, function(all, text){
+			console.log('---');
+			console.log(text);
+			console.log('---');
+			text = text.replace(/&/g, '&amp;').replace(/</g, '&lt;');
+			text = text.replace(/\n/g, '<br />\n');
+			return '<code>'+text+'</code>\n';
 		});
 
-		md = md.replace(/^([0-9]+\.\s.+\n{0,1})+/gm, function(all){
-			all = all.replace(/^[0-9]+\.\s/gm, '<li>');
+		// Ordered and unordered lists
+		md = md.replace(/^(\*\s.+\n?)+/gm, function(all){
+			all = all.replace(/^\*\s(.*)\n?/gm, '<li>$1</li>');
+			return '<ul>'+all+'</ul>';
+		});
+		md = md.replace(/^([0-9]+\.\s.+\n?)+/gm, function(all){
+			all = all.replace(/^[0-9]+\.\s(.*)\n?/gm, '<li>$1</li>');
 			return '<ol>'+all+'</ol>';
 		});
 
-		md = md.replace(/\n\n/g, '<br /><br />');
+		// Paragraphs
+		md = md.replace(/(^|\n{2,})([^<])(.*)/g, '\n<p>$2$3</p>');
 
-		md = md.replace(/\n/g, ' ');
+		// Bold, italics and links
+		md = md.replace(/(\*\*|__)(.*)(\*\*|__)/g, '<b>$2</b>');
+		md = md.replace(/[\*_](.*)[\*_]/g, '<i>$1</i>');
+		md = md.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>');
+
+		// Remove extra line breaks etc
+		md = md.replace('<code><br />', '<code>');
 
 		return md;
 	}
