@@ -1,7 +1,12 @@
 
 var tfmarkdown = {
-	parse: function(md) {
-
+	parse: function(md, disableHtml) {
+		if (disableHtml) {
+			var d = document.createElement('div');
+			d.innerText = md;
+			md = d.innerHTML;
+		}
+		
 		// Titles
 		md = md.replace(/^(#+)\s(.*)/gm, function(all, hashcount, title){
 			var hc = hashcount.length;
@@ -38,6 +43,24 @@ var tfmarkdown = {
 		md = md.replace(/[\*_](.*)[\*_]/g, '<i>$1</i>');
 		md = md.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>');
 
+		// Simple (non-markdown) tables
+		md = md.replace(/^(\|.*\n)+/gm, function(a) {
+			var rows = a.split(/\n/g);
+			var out = ['<table>']
+			for (var i=0; i<rows.length-1; i++) {
+				out.push('<tr>');
+				var cols = rows[i].split(/\|/g);
+				for (var j=1; j<cols.length; j++) {
+					out.push('<td>');
+					out.push(cols[j]);
+					out.push('</td>');
+				}
+				out.push('</tr>');
+			}
+			out.push('</table>\n');
+			return out.join('');
+		});
+		
 		// Reference-style links
 		md = md.replace(/\[(.*?)\]\s*\[(.*?)\]/g, function(all, text, ref) {
 			var path = '';
