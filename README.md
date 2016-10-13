@@ -22,7 +22,7 @@ The single command in TF Markdown can be called like so:
 
 	var myhtml = tfmarkdown.parse(mymarkdown);
 	
-A second parameter `disableHtml` may be set to `true` to escape any existing html, and have it display as text instead. This is useful if the markdown is coming from an unknown source and you want to ensure they don't add a javascript, embeds, or weird content:
+A second parameter `disableHtml` may be set to `true` to escape any existing html, and have it display as text instead. This is useful if the markdown is coming from an unknown source and you want to ensure they don't add javascript, embeds, or weird content:
 
 	var myhtml = tfmarkdown.parse(mymarkdown, true);
 
@@ -36,7 +36,7 @@ A simple table implimentation is supported (that isn't markdown):
 
 If you install this modules using:
 
-	npm install tfmardown -g
+	npm install tfmarkdown -g
 	
 it can easily be used from the command line like so:
 
