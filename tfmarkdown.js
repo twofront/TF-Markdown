@@ -5,6 +5,7 @@ var tfmarkdown = {
 			var d = document.createElement('div');
 			d.innerText = md;
 			md = d.innerHTML;
+			md = md.replace(/<br>/g, '\n');
 		}
 		
 		// Titles
