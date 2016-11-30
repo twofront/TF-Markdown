@@ -1,6 +1,6 @@
 {
   "name": "tfmarkdown",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "A simple javascript markdown parser. Converts to html.",
   "author": "Thomas Baron <thomas.baron@twofront.com>",
   "license": "MIT",
