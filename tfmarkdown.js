@@ -40,8 +40,8 @@ var tfmarkdown = {
 		});
 
 		// Bold, italics and links
-		md = md.replace(/(\*\*|__)(.*)(\*\*|__)?/g, '<b>$2</b>');
-		md = md.replace(/[\*_](.*)[\*_]?/g, '<i>$1</i>');
+		md = md.replace(/(\*\*|__)(.*?)(\*\*|__)/g, '<b>$2</b>');
+		md = md.replace(/[\*_](.*?)[\*_]/g, '<i>$1</i>');
 		md = md.replace(/\[(.*?)\]\((.*?)\)/g, '<a href="$2">$1</a>');
 
 		// Simple (non-markdown) tables
